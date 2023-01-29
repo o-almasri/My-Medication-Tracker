@@ -1,7 +1,7 @@
 # my-medication-tracker
 A simple Android medication Tracker App that remindes the user when to take their medication 
 
-# Team (Group 0)
+# Team (Group 5)
 
 - Omar Almasri 1072739
 - Prince Prince 1115239
