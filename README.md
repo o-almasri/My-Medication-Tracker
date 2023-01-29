@@ -9,10 +9,11 @@ A simple Android medication Tracker App that remindes the user when to take thei
 # Features
 
 - Create a medication entry
-- Mark entry as completed
-- View medication entries (active & completed)
+- View medication entries (active)
 - Edit an entry
 - Delete an entry
+- Mark entry as completed
+- View medication entries (completed)
 - Sort entries
 - Add colored tags
 - Search entries by name
