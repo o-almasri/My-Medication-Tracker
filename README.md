@@ -9,7 +9,6 @@ A simple Android medication Tracker App that remindes the user when to take thei
 # Features
 
 - Create a medication entry
-- Set the notification date and time
 - Mark entry as completed
 - View medication entries (active & completed)
 - Edit an entry
