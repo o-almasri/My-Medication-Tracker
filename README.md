@@ -16,8 +16,7 @@ A simple Android medication Tracker App that remindes the user when to take thei
 - View medication entries (completed)
 - Sort entries
 - Add colored tags
-- Search entries by name
-- Search entries by tag
+- Search entries 
 - Pause notification for a specific entry
 - Pause notification for a specific day
 - Dark mode 
