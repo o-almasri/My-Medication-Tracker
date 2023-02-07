@@ -37,8 +37,7 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
 
         val sharedPreference =  getSharedPreferences("data", Context.MODE_PRIVATE)
         val value = sharedPreference.getString("jsonString","null");
-
-
+        //comment 
 
 
     }//onclick
