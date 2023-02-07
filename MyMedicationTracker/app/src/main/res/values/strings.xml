@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">MyMedicationTracker</string>
+    <string name="app_name">My Medication Tracker</string>
+    <string name="AddEntry">Add a new Medication</string>
+    <string name="QmedicationName">Medication Name</string>
+    <string name="Qtimes">How many times you take this Medication ?</string>
+    <string name="Qtimes2">ex. 3 Times </string>
+    <string name="day">Daily</string>
+    <string name="month">Monthly</string>
+    <string name="year">Yearly</string>
+    <string name="startDay">Starting On: </string>
+    <string name="submit">Submit</string>
+    <string name="medicationExample">Ex.Panadol , Zanix , etc...</string>
+
+
 </resources>
