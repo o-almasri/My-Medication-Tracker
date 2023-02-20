@@ -37,7 +37,6 @@ class adapter(public val dataSet: ArrayList<entry>) :
             editbtn.setOnClickListener {
 
 
-                //----------------------------------
 
                 builder = AlertDialog.Builder(it.context)
                 builder.setTitle("Edit Record")
@@ -60,13 +59,11 @@ class adapter(public val dataSet: ArrayList<entry>) :
                         prefsEditor.putString("list", temp)
                         prefsEditor.apply()
                     }
-                        
+
                     .show()
             }
 
-
-
-
+            
 
 
 
