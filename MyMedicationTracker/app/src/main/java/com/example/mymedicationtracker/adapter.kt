@@ -92,7 +92,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
             word  = " time "
         }
         viewHolder.desctext.setText(String.valueOf(dataSet.get(position).times)+word+String.valueOf(dataSet.get(position).dmy))
-        viewHolder.editbtn.setText("Remove")
+        //viewHolder.editbtn.setText("Remove")
 
     }
 
