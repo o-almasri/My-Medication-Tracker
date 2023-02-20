@@ -52,7 +52,7 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
         if(value != null){
             val slist = gson.fromJson<MutableList<entry>>(value, mutableListOf<entry>().javaClass);
             if(slist != null){
-              //  Toast.makeText(applicationContext,slist.toString(), Toast.LENGTH_LONG).show()
+              
             }
         }
     if(action == "edit"){
