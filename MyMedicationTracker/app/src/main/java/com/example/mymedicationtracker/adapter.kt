@@ -25,13 +25,38 @@ class adapter(public val dataSet: ArrayList<entry>) :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         lateinit var titletext: TextView
         lateinit var desctext: TextView
-
+        lateinit var editbtn: Button
 
 
         init {
             // Define click listener for the ViewHolder's View.
             titletext = view.findViewById<TextView>(R.id.titletxt)
             desctext = view.findViewById<TextView>(R.id.datetxt)
+
+
+
+          /*  editbtn.setOnClickListener {
+
+              //  Toast.makeText(view.getContext(), " position = " + getPosition(), Toast.LENGTH_SHORT).show();
+                dataSet.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition);
+
+                //save the changes to the storage
+
+
+
+                val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
+                val prefsEditor = pref.edit()
+                val gson = Gson()
+
+                //serialize dataSet
+                var temp = gson.toJson(dataSet);
+                prefsEditor.putString("list", temp)
+                prefsEditor.apply()
+
+            }*/
+
+
 
 
 
@@ -67,7 +92,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
             word  = " time "
         }
         viewHolder.desctext.setText(String.valueOf(dataSet.get(position).times)+word+String.valueOf(dataSet.get(position).dmy))
-
+        viewHolder.editbtn.setText("Remove")
 
     }
 
