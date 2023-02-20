@@ -2,12 +2,14 @@ package com.example.mymedicationtracker
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import java.lang.String
@@ -17,7 +19,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
 
     lateinit var personArrayList: ArrayList<entry>
     lateinit var context: Context
-
+    lateinit var list:ArrayList<entry>
 
     /**
      * Provide a reference to the type of views that you are using
@@ -37,13 +39,46 @@ class adapter(public val dataSet: ArrayList<entry>) :
             editbtn.setOnClickListener {
 
 
-
+                val gson = Gson()
                 builder = AlertDialog.Builder(it.context)
                 builder.setTitle("Edit Record")
                     .setMessage("Choose an action from below ")
                     .setCancelable(true)
                     .setPositiveButton("Edit"){dialogInterface,It->
-                        dialogInterface.cancel()
+
+
+                        //generate a new empty list
+                        list = arrayListOf<entry>();
+                        //add item with same attributes to list
+                        list.add(dataSet[adapterPosition])
+
+                        //convert list to JSON
+                        var temp = gson.toJson(list);
+                        //set intent mode to Edit and content to JSON string
+                        val intent = Intent(it.context , Add_entry::class.java);
+                        intent.putExtra("mode","edit")
+                        intent.putExtra("content",temp)
+
+                        //remove old item
+                        dataSet.removeAt(adapterPosition)
+                        notifyItemRemoved(adapterPosition);
+
+                        //save the changes to the storage
+                        val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
+                        val prefsEditor = pref.edit()
+
+                        //serialize dataSet
+                        var temp1 = gson.toJson(dataSet);
+                        prefsEditor.putString("list", temp1)
+                        prefsEditor.apply()
+
+
+
+                        it.context.startActivity(intent)
+                        //start new activity
+
+
+
                     }
                     .setNegativeButton("DELETE"){dialogInterface,It->
                         dataSet.removeAt(adapterPosition)
@@ -52,7 +87,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
                         //save the changes to the storage
                         val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
                         val prefsEditor = pref.edit()
-                        val gson = Gson()
+
 
                         //serialize dataSet
                         var temp = gson.toJson(dataSet);
@@ -62,9 +97,6 @@ class adapter(public val dataSet: ArrayList<entry>) :
 
                     .show()
             }
-
-            
-
 
 
         }

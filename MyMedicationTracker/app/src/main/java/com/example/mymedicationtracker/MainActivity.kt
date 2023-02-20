@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
             addbtn->{
                 //go to activity
                 val intent = Intent(this , Add_entry::class.java);
+                intent.putExtra("mode","new")
                 startActivity(intent);
             }
 

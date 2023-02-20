@@ -19,6 +19,9 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
     lateinit var Medtimes:EditText;
     lateinit var RG:RadioGroup;
     lateinit var Radiobtn:RadioButton;
+    lateinit var rday:RadioButton;
+    lateinit var rmonth:RadioButton;
+    lateinit var ryear:RadioButton;
     lateinit var submit: Button;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,10 +31,17 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
         MedName  = findViewById(R.id.medicationNameID)
         Medtimes  = findViewById(R.id.medicationtimesID)
         submit  = findViewById(R.id.submitbtn)
+
+        rday = findViewById(R.id.rday)
+        rmonth = findViewById(R.id.rmonth)
+        ryear = findViewById(R.id.ryear)
+
         RG = findViewById(R.id.RG1)
 
         //adding onclick listener
         submit.setOnClickListener(this);
+
+        val action =intent.getStringExtra("mode")
 
 
         //retreive the data
@@ -45,13 +55,61 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
               //  Toast.makeText(applicationContext,slist.toString(), Toast.LENGTH_LONG).show()
             }
         }
+    if(action == "edit"){
+        submit.setText("Done");
+        //edit mode so fill the fields
+        val passedstring = intent.getStringExtra("content");
 
+        if(!passedstring.isNullOrBlank()){
+
+          //  val item = gson.fromJson<MutableList<entry>>(passedstring, mutableListOf<entry>().javaClass);
+           // Toast.makeText(applicationContext,item.toString(), Toast.LENGTH_LONG).show()
+
+            val myType = object : TypeToken<ArrayList<entry>>() {}.type
+            val logs = gson.fromJson<ArrayList<entry>>(passedstring, myType)
+            //Toast.makeText(applicationContext,logs[0].times.toString(), Toast.LENGTH_LONG).show()
+            if(logs != null){
+                MedName.setText(logs[0].name)
+                Medtimes.setText(logs[0].times.toString());
+                setIDfromText(logs[0].dmy)
+            }
+
+        }
+
+    }
 
 
 
 
     }//onclick
 
+fun setIDfromText(str:String){
+
+
+    if(str.equals(getString(R.string.day))) {
+        RG.check(R.id.rday)
+    }else if(str.equals(getString(R.string.month))){
+        RG.check(R.id.rmonth)
+    } else if(str.equals(getString(R.string.year))){
+        Toast.makeText(applicationContext,"year was true", Toast.LENGTH_LONG).show()
+        RG.check(R.id.ryear)
+    }
+
+
+}
+
+    override fun onPause() {
+        super.onPause()
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        //save data before exiting
+
+    }
 
     override fun onClick(p0: View?) {
         when (p0) {
