@@ -52,7 +52,7 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
         if(value != null){
             val slist = gson.fromJson<MutableList<entry>>(value, mutableListOf<entry>().javaClass);
             if(slist != null){
-              
+
             }
         }
     if(action == "edit"){
@@ -91,7 +91,7 @@ fun setIDfromText(str:String){
     }else if(str.equals(getString(R.string.month))){
         RG.check(R.id.rmonth)
     } else if(str.equals(getString(R.string.year))){
-        Toast.makeText(applicationContext,"year was true", Toast.LENGTH_LONG).show()
+       // Toast.makeText(applicationContext,"year was true", Toast.LENGTH_LONG).show()
         RG.check(R.id.ryear)
     }
 

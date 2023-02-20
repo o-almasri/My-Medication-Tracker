@@ -41,13 +41,11 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         //get list from storage and apply it
          list = arrayListOf<entry>()
         val sharedPreference =  getSharedPreferences("Gson", Context.MODE_PRIVATE)
-        val pref = getSharedPreferences("Gson", Context.MODE_PRIVATE);
         var gson = Gson()
         val value = sharedPreference.getString("list","null");
-        val prefsEditor = pref.edit()
-        var serilizedArray  =  pref.getString("list","NULL");
 
-        if(value !="NULL" && value != "[]"){
+
+        if(value !="null" && value != "[]"){
 
 
             val myType = object : TypeToken<ArrayList<entry>>() {}.type
@@ -65,21 +63,21 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
         }else {
             //nothing found
-            Toast.makeText(this, " List is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, " List is 1 Empty", Toast.LENGTH_SHORT).show();
 
         }
 
+        if(list.isNotEmpty()){
+            //setup recyclerView
+            recyclerView = findViewById(R.id.RCV)
+            recyclerViewManager = LinearLayoutManager(applicationContext)
+            recyclerView.layoutManager = recyclerViewManager
+            recyclerView.setHasFixedSize(true)
+            recyclerAdapter = adapter(list);
+            recyclerView.adapter = recyclerAdapter;
+        }
 
-        //setup recyclerView
-        recyclerView = findViewById(R.id.RCV)
-        recyclerViewManager = LinearLayoutManager(applicationContext)
-        recyclerView.layoutManager = recyclerViewManager
-        recyclerView.setHasFixedSize(true)
 
-
-
-        recyclerAdapter = adapter(list);
-        recyclerView.adapter = recyclerAdapter;
 
 
 
@@ -99,20 +97,25 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         val pref = getSharedPreferences("Gson", Context.MODE_PRIVATE);
         var gson = Gson()
         val value = sharedPreference.getString("list","null");
-        list = arrayListOf<entry>()
-        val myType = object : TypeToken<ArrayList<entry>>() {}.type
-        val logs = gson.fromJson<ArrayList<entry>>(value, myType)
-        for (citem in logs) {
-            list.add(
-                entry(
-                    citem.name,citem.times,citem.dmy,citem.startdate
-                )
-            )
-        }
+       if(value != "null"){
+           list = arrayListOf<entry>()
+           val myType = object : TypeToken<ArrayList<entry>>() {}.type
+           val logs = gson.fromJson<ArrayList<entry>>(value, myType)
+           if(!logs[0].name.isNullOrBlank()){
+               for (citem in logs) {
+                   list.add(
+                       entry(
+                           citem.name,citem.times,citem.dmy,citem.startdate
+                       )
+                   )
+               }
+               recyclerAdapter = adapter(list);
+               recyclerView.adapter = recyclerAdapter;
+               recyclerAdapter.notifyDataSetChanged();
+           }//is null
+       }
 
-        recyclerAdapter = adapter(list);
-        recyclerView.adapter = recyclerAdapter;
-        recyclerAdapter.notifyDataSetChanged();
+
 
     }
 
