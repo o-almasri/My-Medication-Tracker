@@ -46,7 +46,20 @@ class adapter(public val dataSet: ArrayList<entry>) :
                     .setPositiveButton("Edit"){dialogInterface,It->
                         dialogInterface.cancel()
                     }
+                    .setNegativeButton("DELETE"){dialogInterface,It->
+                        dataSet.removeAt(adapterPosition)
+                        notifyItemRemoved(adapterPosition);
 
+                        //save the changes to the storage
+                        val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
+                        val prefsEditor = pref.edit()
+                        val gson = Gson()
+
+                        //serialize dataSet
+                        var temp = gson.toJson(dataSet);
+                        prefsEditor.putString("list", temp)
+                        prefsEditor.apply()
+                    }
                         
                     .show()
             }
