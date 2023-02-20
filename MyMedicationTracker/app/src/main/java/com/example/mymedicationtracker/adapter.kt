@@ -1,5 +1,6 @@
 package com.example.mymedicationtracker
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -26,35 +27,30 @@ class adapter(public val dataSet: ArrayList<entry>) :
         lateinit var titletext: TextView
         lateinit var desctext: TextView
         lateinit var editbtn: Button
-
+        lateinit var builder:AlertDialog.Builder
 
         init {
             // Define click listener for the ViewHolder's View.
             titletext = view.findViewById<TextView>(R.id.titletxt)
             desctext = view.findViewById<TextView>(R.id.datetxt)
+            editbtn = view.findViewById(R.id.editbtn);
+            editbtn.setOnClickListener {
 
 
+                //----------------------------------
 
-          /*  editbtn.setOnClickListener {
+                builder = AlertDialog.Builder(it.context)
+                builder.setTitle("Edit Record")
+                    .setMessage("Choose an action from below ")
+                    .setCancelable(true)
+                    .setPositiveButton("Edit"){dialogInterface,It->
+                        dialogInterface.cancel()
+                    }
 
-              //  Toast.makeText(view.getContext(), " position = " + getPosition(), Toast.LENGTH_SHORT).show();
-                dataSet.removeAt(adapterPosition)
-                notifyItemRemoved(adapterPosition);
+                        
+                    .show()
+            }
 
-                //save the changes to the storage
-
-
-
-                val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
-                val prefsEditor = pref.edit()
-                val gson = Gson()
-
-                //serialize dataSet
-                var temp = gson.toJson(dataSet);
-                prefsEditor.putString("list", temp)
-                prefsEditor.apply()
-
-            }*/
 
 
 
@@ -92,7 +88,8 @@ class adapter(public val dataSet: ArrayList<entry>) :
             word  = " time "
         }
         viewHolder.desctext.setText(String.valueOf(dataSet.get(position).times)+word+String.valueOf(dataSet.get(position).dmy))
-        //viewHolder.editbtn.setText("Remove")
+        viewHolder.editbtn.setText("Edit")
+
 
     }
 
