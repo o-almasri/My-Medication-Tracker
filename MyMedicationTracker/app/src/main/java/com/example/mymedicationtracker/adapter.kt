@@ -137,7 +137,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
         if(dataSet.get(position).completed){
             viewHolder.imageView.setImageResource(R.mipmap.doneimg)
         }else {
-            
+            //
         }
 
 
