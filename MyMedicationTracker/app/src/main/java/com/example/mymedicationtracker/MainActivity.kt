@@ -1,9 +1,10 @@
 package com.example.mymedicationtracker
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
+import android.app.PendingIntent.getBroadcast
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.ref.ReferenceQueue
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() , View.OnClickListener{
 
@@ -27,17 +31,26 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     lateinit var list:ArrayList<entry>
 
 
-    private val CHANNEL_ID = "channel_id_example_01"
-    private val notificationId = 101
+    private val CHANNEL_ID = "channel_id_example_111"
+    private val notificationId = 10
 
 
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        createNotificationChannel()
+        //createNotificationChannel()
+        createNotificationChannel3()
+
+
+
+
+
+
 
         addbtn = findViewById(R.id.addbtn);
         addbtn.setOnClickListener(this);
@@ -86,18 +99,6 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
 
 
-
-        val btn = findViewById<Button>(R.id.bbtn)
-        btn.setOnClickListener{
-            sendNotification()
-        }
-
-
-
-
-
-
-
     }
 
     fun refresh(){
@@ -132,6 +133,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     override fun onResume() {
         super.onResume()
         refresh()
+        sendNotification()
     }
     override fun onPause() {
         super.onPause()
@@ -178,6 +180,84 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
         }
     }
+
+    private fun scheduleNotification()
+    {
+        val intent = Intent(applicationContext, Notification::class.java)
+        val title = "TITLE HERE OWOWO"
+        val message = "MSG HERE"
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getTime()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
+            pendingIntent)
+
+        showAlert(time, title, message)
+    }
+
+    private fun showAlert(time: Long, title: String, message: String)
+    {
+        val date = Date(time)
+        val dateFormat = android.text.format.DateFormat.getLongDateFormat(applicationContext)
+        val timeFormat = android.text.format.DateFormat.getTimeFormat(applicationContext)
+
+        AlertDialog.Builder(this)
+            .setTitle("Notification Scheduled")
+            .setMessage(
+                "Title: " + title +
+                        "\nMessage: " + message +
+                        "\nAt: " + dateFormat.format(date) + " " + timeFormat.format(date))
+            .setPositiveButton("Okay"){_,_ ->}
+            .show()
+    }
+
+    private fun getTime(): Long
+    {
+        val minute = LocalDateTime.now().minute+1
+        val hour = LocalDateTime.now().hour
+        val day = LocalDateTime.now().dayOfMonth
+        val month = LocalDateTime.now().monthValue
+        val year = LocalDateTime.now().year
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day, hour, minute)
+        return calendar.timeInMillis
+    }
+
+    private fun createNotificationChannel3()
+    {
+        val name = "Notif Channel"
+        val desc = "A Description of the Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelID, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
+
+
+
+
+
+
 
 
 
