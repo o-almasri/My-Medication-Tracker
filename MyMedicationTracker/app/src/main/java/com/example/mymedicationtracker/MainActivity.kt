@@ -34,22 +34,12 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     private val CHANNEL_ID = "channel_id_example_111"
     private val notificationId = 10
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         createNotificationChannel()
-
-
-
-
-
-
 
 
         addbtn = findViewById(R.id.addbtn);

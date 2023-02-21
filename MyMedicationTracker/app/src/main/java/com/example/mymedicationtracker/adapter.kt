@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -30,13 +31,15 @@ class adapter(public val dataSet: ArrayList<entry>) :
         lateinit var desctext: TextView
         lateinit var editbtn: Button
         lateinit var builder:AlertDialog.Builder
+        lateinit var imageView: ImageView
 
         init {
             // Define click listener for the ViewHolder's View.
             titletext = view.findViewById<TextView>(R.id.titletxt)
             desctext = view.findViewById<TextView>(R.id.datetxt)
             editbtn = view.findViewById(R.id.editbtn);
-            editbtn.setOnClickListener {
+            imageView = view.findViewById(R.id.imageView)
+                editbtn.setOnClickListener {
 
 
                 val gson = Gson()
@@ -131,6 +134,11 @@ class adapter(public val dataSet: ArrayList<entry>) :
         }
         viewHolder.desctext.setText(String.valueOf(dataSet.get(position).times)+word+String.valueOf(dataSet.get(position).dmy))
         viewHolder.editbtn.setText("Edit")
+        if(dataSet.get(position).completed){
+            viewHolder.imageView.setImageResource(R.mipmap.doneimg)
+        }else {
+            
+        }
 
 
     }
