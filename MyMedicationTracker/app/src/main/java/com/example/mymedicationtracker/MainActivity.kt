@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //createNotificationChannel()
-        createNotificationChannel3()
+        createNotificationChannel()
+
 
 
 
