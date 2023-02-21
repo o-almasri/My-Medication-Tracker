@@ -23,7 +23,7 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
     lateinit var rmonth:RadioButton;
     lateinit var ryear:RadioButton;
     lateinit var submit: Button;
-
+    lateinit var switch: Switch
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entry)
@@ -31,6 +31,8 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
         MedName  = findViewById(R.id.medicationNameID)
         Medtimes  = findViewById(R.id.medicationtimesID)
         submit  = findViewById(R.id.submitbtn)
+        switch = findViewById(R.id.switch1)
+
 
         rday = findViewById(R.id.rday)
         rmonth = findViewById(R.id.rmonth)
@@ -72,6 +74,7 @@ class Add_entry : AppCompatActivity()  ,View.OnClickListener {
                 MedName.setText(logs[0].name)
                 Medtimes.setText(logs[0].times.toString());
                 setIDfromText(logs[0].dmy)
+                switch.isChecked = logs[0].completed
             }
 
         }
@@ -146,7 +149,8 @@ fun setIDfromText(str:String){
                                     MedName.text.toString(),
                                     Medtimes.text.toString().toInt(),
                                     Radiobtn.text.toString(),
-                                    current.toString()
+                                    current.toString(),
+                                    switch.isChecked
                                 )
                             )
 
@@ -169,7 +173,8 @@ fun setIDfromText(str:String){
                                     MedName.text.toString(),
                                     Medtimes.text.toString().toInt(),
                                     Radiobtn.text.toString(),
-                                    current.toString()
+                                    current.toString(),
+                                    switch.isChecked
                                 )
                             )
                             val gson = Gson()
@@ -178,7 +183,7 @@ fun setIDfromText(str:String){
                             prefsEditor.apply()
                             Toast.makeText(this, " new List Created Success", Toast.LENGTH_SHORT)
                                 .show();
-                            
+
 
                         }
 

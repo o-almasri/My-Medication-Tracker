@@ -4,5 +4,6 @@ data class entry(
     val name: String,
     val times: Int,
     val dmy:String,
-    val startdate:String
+    val startdate:String,
+    var completed:Boolean
 )

@@ -10,6 +10,6 @@
     <string name="startDay">Starting On: </string>
     <string name="submit">Submit</string>
     <string name="medicationExample">Ex.Panadol , Zanix , etc...</string>
-
+    <string name="comp">Completed This Course ?</string>
 
 </resources>

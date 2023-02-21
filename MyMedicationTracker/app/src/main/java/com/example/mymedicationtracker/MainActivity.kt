@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
                 list.add(
                     entry(
-                        citem.name,citem.times,citem.dmy,citem.startdate
+                        citem.name,citem.times,citem.dmy,citem.startdate , citem.completed
                     )
                 )
             }
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                for (citem in logs) {
                    list.add(
                        entry(
-                           citem.name,citem.times,citem.dmy,citem.startdate
+                           citem.name,citem.times,citem.dmy,citem.startdate,citem.completed
                        )
                    )
                }
