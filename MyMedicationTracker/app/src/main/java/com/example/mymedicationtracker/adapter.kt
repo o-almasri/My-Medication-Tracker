@@ -138,6 +138,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
             viewHolder.imageView.setImageResource(R.mipmap.doneimg)
         }else {
             //
+            //
         }
 
 
