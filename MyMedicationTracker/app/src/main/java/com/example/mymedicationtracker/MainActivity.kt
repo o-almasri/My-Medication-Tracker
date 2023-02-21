@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
         }else {
             //nothing found
-            Toast.makeText(this, " List is 1 Empty", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, " List is 1 Empty", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -100,7 +100,9 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
        if(value != "null"){
            list = arrayListOf<entry>()
            val myType = object : TypeToken<ArrayList<entry>>() {}.type
+
            val logs = gson.fromJson<ArrayList<entry>>(value, myType)
+           if(logs.isNotEmpty())
            if(!logs[0].name.isNullOrBlank()){
                for (citem in logs) {
                    list.add(
@@ -123,7 +125,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     override fun onResume() {
         super.onResume()
         refresh()
-        sendNotification()
+       // sendNotification()
     }
     override fun onPause() {
         super.onPause()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -181,16 +182,15 @@ fun setIDfromText(str:String){
                             var temp = gson.toJson(mylistArray);
                             prefsEditor.putString("list", temp)
                             prefsEditor.apply()
-                            Toast.makeText(this, " new List Created Success", Toast.LENGTH_SHORT)
-                                .show();
-
-
+                            Toast.makeText(this, " Success", Toast.LENGTH_SHORT).show();
                         }
 
 
                     }
+
             }
         }
+
     }
 
 
