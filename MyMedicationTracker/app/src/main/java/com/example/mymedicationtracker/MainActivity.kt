@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         addbtn = findViewById(R.id.addbtn);
         addbtn.setOnClickListener(this);
 
-
+        recyclerView = findViewById(R.id.RCV)
+        recyclerViewManager = LinearLayoutManager(applicationContext)
+        recyclerView.layoutManager = recyclerViewManager
 
         //get list from storage and apply it
          list = arrayListOf<entry>()

@@ -135,7 +135,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
         viewHolder.desctext.setText(String.valueOf(dataSet.get(position).times)+word+String.valueOf(dataSet.get(position).dmy))
         viewHolder.editbtn.setText("Edit")
         if(dataSet.get(position).completed){
-            viewHolder.imageView.setImageResource(R.mipmap.doneimg)
+            viewHolder.imageView.setImageResource(R.mipmap.doneimgtwo_foreground)
         }else {
             //
             //

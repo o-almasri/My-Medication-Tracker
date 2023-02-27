@@ -183,6 +183,7 @@ fun setIDfromText(str:String){
                             prefsEditor.putString("list", temp)
                             prefsEditor.apply()
                             Toast.makeText(this, " Success", Toast.LENGTH_SHORT).show();
+                            finish()
                         }
 
 
