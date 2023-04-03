@@ -4,6 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.core.app.NotificationCompat
 
@@ -18,10 +20,12 @@ class Notification : BroadcastReceiver()
     override fun onReceive(context: Context, intent: Intent)
     {
 
+
         val notification = NotificationCompat.Builder(context, channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(intent.getStringExtra(titleExtra))
             .setContentText(intent.getStringExtra(messageExtra))
+            .setLargeIcon(BitmapFactory.decodeResource(context.resources,R.drawable.play_store_512))
             .setGroup(groupKey)
             .build()
 

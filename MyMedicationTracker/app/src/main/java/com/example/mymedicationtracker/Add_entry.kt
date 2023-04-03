@@ -335,7 +335,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val time = getTime()
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time,interval,pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time + 1000*60,interval,pendingIntent)
 
 
         showAlert(time, title, message)
