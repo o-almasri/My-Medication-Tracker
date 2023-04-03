@@ -97,12 +97,60 @@
 
         </RadioGroup>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/progressTag"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/progressid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/progress"
+                    android:inputType="number"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/totalid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/totaldosage"
+                    android:inputType="number"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/submitbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/submit"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/myID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MyID" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
     lateinit var addbtn: Button;
     lateinit var recyclerView: RecyclerView
-    lateinit var recyclerAdapter: adapter
+    lateinit var recyclerAdapter: newadapter
     lateinit var recyclerViewManager: RecyclerView.LayoutManager
     lateinit var list:ArrayList<entry>
 
@@ -61,15 +61,19 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
             val myType = object : TypeToken<ArrayList<entry>>() {}.type
             val logs = gson.fromJson<ArrayList<entry>>(value, myType)
-            if(logs != null)
+            if(logs != null){
             for (citem in logs) {
 
                 list.add(
                     entry(
-                        citem.name,citem.times,citem.dmy,citem.startdate , citem.completed
+                        citem.name,citem.times,citem.dmy,citem.startdate , citem.completed , citem.tdoes ,citem.current , citem.myID
                     )
                 )
             }
+                //Toast.makeText(this, logs[0].tdoes.toString(), Toast.LENGTH_LONG).show();
+
+            }
+
 
 
         }else {
@@ -84,7 +88,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
             recyclerViewManager = LinearLayoutManager(applicationContext)
             recyclerView.layoutManager = recyclerViewManager
             recyclerView.setHasFixedSize(true)
-            recyclerAdapter = adapter(list);
+            recyclerAdapter = newadapter(list);
             recyclerView.adapter = recyclerAdapter;
         }
 
@@ -109,11 +113,11 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
                for (citem in logs) {
                    list.add(
                        entry(
-                           citem.name,citem.times,citem.dmy,citem.startdate,citem.completed
+                           citem.name,citem.times,citem.dmy,citem.startdate,citem.completed , citem.tdoes , citem.current ,citem.myID
                        )
                    )
                }
-               recyclerAdapter = adapter(list);
+               recyclerAdapter = newadapter(list);
                recyclerView.adapter = recyclerAdapter;
                recyclerAdapter.notifyDataSetChanged();
            }//is null

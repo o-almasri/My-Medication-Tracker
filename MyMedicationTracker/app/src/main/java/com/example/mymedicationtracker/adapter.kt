@@ -33,6 +33,7 @@ class adapter(public val dataSet: ArrayList<entry>) :
         lateinit var builder:AlertDialog.Builder
         lateinit var imageView: ImageView
 
+
         init {
             // Define click listener for the ViewHolder's View.
             titletext = view.findViewById<TextView>(R.id.titletxt)
