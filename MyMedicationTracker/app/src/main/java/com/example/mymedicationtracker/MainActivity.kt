@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        createNotificationChannel()
+       
 
 
         addbtn = findViewById(R.id.addbtn);
@@ -139,29 +139,8 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
     }
 
-    private fun createNotificationChannel(){
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            val name = "Medication Time"
-            val descriptionText = "Please take the Following Medication"
-            val importance = NotificationManager.IMPORTANCE_HIGH;
-            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE)as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
 
-    private fun sendNotification(){
-        val builder = NotificationCompat.Builder(this,CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Medication Time")
-            .setContentText("Please take the Following Medication")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-        with(NotificationManagerCompat.from(this)){
-            notify(notificationId,builder.build())
-        }
-    }
+
 
 
 
@@ -179,35 +158,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         }
     }
 
-    private fun scheduleNotification()
-    {
-        val intent = Intent(applicationContext, Notification::class.java)
-        val title = "TITLE HERE OWOWO"
-        val message = "MSG HERE"
-        intent.putExtra(titleExtra, title)
-        intent.putExtra(messageExtra, message)
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            notificationID,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            time,
-            pendingIntent
-        )
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time,
-            pendingIntent)
-
-        showAlert(time, title, message)
-    }
 
     private fun showAlert(time: Long, title: String, message: String)
     {
@@ -238,16 +189,6 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
         return calendar.timeInMillis
     }
 
-    private fun createNotificationChannel3()
-    {
-        val name = "Notif Channel"
-        val desc = "A Description of the Channel"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelID, name, importance)
-        channel.description = desc
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
 
 
 
