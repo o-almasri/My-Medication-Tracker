@@ -1,14 +1,14 @@
 package com.example.mymedicationtracker
 
-
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import java.lang.String
