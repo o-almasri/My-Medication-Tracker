@@ -57,8 +57,9 @@ class history : AppCompatActivity(), View.OnClickListener  {
             Log.d("Datalist","Added 1 element ${obj}")
             storeDate2(obj!!)
 
-            //add 1 Dose to the Progress
+            //add 1 Dose number to the Progress
             adddose(rparcelid,rparceldose.toInt())
+
 
 
 
