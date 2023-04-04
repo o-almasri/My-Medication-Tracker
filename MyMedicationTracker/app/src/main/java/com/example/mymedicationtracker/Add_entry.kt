@@ -168,10 +168,16 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             if(myIDvalue.isNullOrBlank()){
                                 myIDvalue = notificationuid.toString()
                             }
-
-                            if((totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1){
-
+                            if(totaldosecurrent.text.toString().toInt()<=0){
+                                totaldosecurrent.setText("1");
                             }
+                            if(progresscurrent.text.toString().toInt()<=0){
+                                progresscurrent.setText("0");
+                            }
+                            if(progresscurrent.text.toString().toInt()<=totaldosecurrent.text.toString().toInt()){
+                                totaldosecurrent.setText(totaldosecurrent.text.toString());
+                            }
+
                             logs.add(
                                 entry(
                                     //name

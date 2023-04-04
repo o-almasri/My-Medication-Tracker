@@ -22,9 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Select a date:"
-                android:textAlignment="center"
-                android:textSize="20sp"
+                android:text="Pause notification on :"
+                android:textAlignment="textStart"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <!-- DatePicker in spinner mode -->
@@ -48,7 +48,7 @@
 
             <!-- Button -->
             <Button
-                android:id="@+id/button"
+                android:id="@+id/snoozbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -64,8 +64,18 @@
             android:orientation="vertical">
 
             <!-- RecyclerView -->
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Paused days :"
+                android:textAlignment="textStart"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/pausedrecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -74,15 +84,14 @@
 
             <!-- Button -->
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/clearbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="clear" />
 
 
-
-    </LinearLayout>
+        </LinearLayout>
 
 
 </LinearLayout>

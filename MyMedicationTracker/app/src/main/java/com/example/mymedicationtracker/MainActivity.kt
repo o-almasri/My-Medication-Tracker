@@ -18,6 +18,7 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() , View.OnClickListener {
     lateinit var addbtn: Button;
+    lateinit var settingbtn: Button;
     lateinit var recyclerView: RecyclerView
     lateinit var recyclerAdapter: newadapter
     lateinit var recyclerViewManager: RecyclerView.LayoutManager
@@ -46,6 +47,8 @@ THIS IS THE WORKING ONE
 
         addbtn = findViewById(R.id.addbtn);
         addbtn.setOnClickListener(this);
+        settingbtn = findViewById(R.id.settingsButton);
+        settingbtn.setOnClickListener(this);
 
         recyclerView = findViewById(R.id.RCV)
         recyclerViewManager = LinearLayoutManager(applicationContext)
@@ -156,6 +159,13 @@ THIS IS THE WORKING ONE
                 intent.putExtra("mode","new")
                 startActivity(intent);
             }
+            settingbtn->{
+                //go to activity
+                val intent = Intent(applicationContext,settings::class.java)
+                intent.putExtra("mode","new")
+                startActivity(intent);
+            }
+
 
         }
     }
