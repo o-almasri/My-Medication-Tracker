@@ -11,87 +11,94 @@
 
 
         <!-- Top half of the screen -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <!-- Text -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:padding="16dp"
+            android:text="Pause notification on :"
+            android:textAlignment="textStart"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- DatePicker in spinner mode -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3">
 
-            <!-- Text -->
-            <TextView
+            <DatePicker
+                android:id="@+id/datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Pause notification on :"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
 
-            <!-- DatePicker in spinner mode -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <DatePicker
-                    android:id="@+id/datePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:calendarViewShown="false"
-                    android:datePickerMode="spinner"
-                    android:scaleX="1"
-                    android:scaleY="1"
-
-                    />
-            </LinearLayout>
-
-            <!-- Button -->
-            <Button
-                android:id="@+id/snoozbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Snooze Day" />
-
+                />
         </LinearLayout>
+
+        <!-- Button -->
+        <Button
+            android:id="@+id/snoozbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="Snooze Day" />
+
+    </LinearLayout>
 
         <!-- Bottom half of the screen -->
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:orientation="vertical">
+
+        <!-- RecyclerView -->
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Paused days :"
+            android:textAlignment="textStart"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyrecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:padding="16dp"
+            tools:listitem="@layout/settingscard" />
 
-            <!-- RecyclerView -->
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Paused days :"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <!-- Button -->
+        <Button
+            android:id="@+id/backbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="clear" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/pausedrecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="16dp"
-                tools:listitem="@layout/settingscard" />
-
-            <!-- Button -->
-            <Button
-                android:id="@+id/clearbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="clear" />
+        <Button
+            android:id="@+id/gotohistorybtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My history" />
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

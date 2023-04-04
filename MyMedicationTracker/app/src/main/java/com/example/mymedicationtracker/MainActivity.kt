@@ -71,7 +71,7 @@ THIS IS THE WORKING ONE
 
                     list.add(
                         entry(
-                            citem.name,citem.times,citem.dmy,citem.startdate , citem.completed , citem.tdoes ,citem.current , citem.myID , citem.notificationStatus
+                            citem.name,citem.times,citem.dmy,citem.startdate , citem.completed , citem.tdoes ,citem.current , citem.myID , citem.notificationStatus , citem.type ,citem.amount
                         )
                     )
                 }
@@ -118,7 +118,7 @@ THIS IS THE WORKING ONE
                     for (citem in logs) {
                         list.add(
                             entry(
-                                citem.name,citem.times,citem.dmy,citem.startdate,citem.completed , citem.tdoes , citem.current ,citem.myID ,citem.notificationStatus
+                                citem.name,citem.times,citem.dmy,citem.startdate,citem.completed , citem.tdoes , citem.current ,citem.myID ,citem.notificationStatus,citem.type,citem.amount
                             )
                         )
                     }

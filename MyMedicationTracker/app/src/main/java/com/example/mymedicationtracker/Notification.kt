@@ -22,6 +22,15 @@ const val channelID = "channel1"
 const val channelID2 = "channel2"
 const val titleExtra = "titleExtra"
 const val messageExtra = "messageExtra"
+const val msgitem = "myitem"
+
+const val parceltitle = "parceltitle"
+const val parceldesc = "parceldesc"
+const val parceldate = "parceldate"
+const val parceldose = "parceldose"
+const val parceltype = "parceltype"
+const val parcelid = "parcelid"
+
 
 const val groupKey = "medication"
 class Notification : BroadcastReceiver()
@@ -31,13 +40,26 @@ class Notification : BroadcastReceiver()
         val title = intent.getStringExtra(titleExtra)
         val desc = intent.getStringExtra(messageExtra)
 
+
+
+        val rparceltitle = intent.getStringExtra(parceltitle)!!
+        val rparceldesc = intent.getStringExtra(parceldesc)!!
+        val rparceldate = Date().time
+        val rparceldose = intent.getStringExtra(parceldose)!!
+        val rparceltype = intent.getStringExtra(parceltype)!!
+        val rparcelid = intent.getStringExtra(parcelid)!!
+        Log.d("Notification","ID is IS  ${rparcelid}")
+
+        val obj = historyitem(rparceltitle,rparceldesc,Date(rparceldate),rparceldose,rparceltype,rparcelid)
+
+
         val sharedPreference = context.getSharedPreferences("Gson", Context.MODE_PRIVATE)
         val gson = Gson()
         val value = sharedPreference.getString("datelist", "null")
         val prefsEditor = sharedPreference.edit()
-        Log.d("NOTIFICATION LOGS","1")
+
         if (value != "null" && value != "[]") {
-            Log.d("NOTIFICATION LOGS","2")
+
             val myType = object : TypeToken<ArrayList<Date>>() {}.type
             val logs = gson.fromJson<ArrayList<Date>>(value, myType)
             val today = Date(Calendar.getInstance().timeInMillis)
@@ -47,7 +69,8 @@ class Notification : BroadcastReceiver()
             if (logs != null) {
                 if(!have(logs,today)){
                     //Day is  not Blacklisted
-                    notify(context , title , desc)
+                    Log.d("NOTIFICATION LOGS","1")
+                    notify(context , title , desc,obj)
                 }
 
             }
@@ -55,20 +78,36 @@ class Notification : BroadcastReceiver()
             // datelist is ready to read from now
 
         }else {
-            notify(context , title , desc)
-            Log.d("NOTIFICATION LOGS","5")
+            Log.d("NOTIFICATION LOGS","2")
+            notify(context , title , desc,obj)
+
         }
 
 
-        Log.d("NOTIFICATION LOGS","6")
+
 
     }
 
-    fun notify(context: Context ,title:String? , desc:String? ){
-        Log.d("NOTIFICATION LOGS","3")
-        val intent = Intent(context, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+    fun notify(context: Context ,title:String? , desc:String? ,obj:historyitem){
 
+
+        val intent = Intent(context, history::class.java)
+        intent.putExtra("mode","add")
+
+        Log.d("Notification","OBJECT IS  ${obj}")
+        intent.putExtra("parceltitle", obj.Title)
+        intent.putExtra("parceldesc", obj.desc)
+        intent.putExtra("parceldate", obj.date.time.toString())
+        intent.putExtra("parceldose", obj.dose)
+        intent.putExtra("parceltype", obj.type)
+        intent.putExtra("parcelid", obj.ID)
+
+        val receivedItem = intent.getParcelableExtra<historyitem>("myitem")
+        intent.putExtra("myitem",receivedItem)
+
+
+        var pendingIntent = PendingIntent.getActivity(context, obj.ID.toInt(), intent, 0)
+        //TODO:: make action button auto cancel Notification when clicked
         val action = NotificationCompat.Action.Builder(0, "Done", pendingIntent).build()
 
         val nstatus = intent.getBooleanExtra(notificationStatus,true)
@@ -79,6 +118,7 @@ class Notification : BroadcastReceiver()
             .setContentText(desc)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources,R.drawable.play_store_512))
             .setGroup(groupKey)
+            .setAutoCancel(true)
             .addAction(action)
             .build()
 
@@ -89,6 +129,7 @@ class Notification : BroadcastReceiver()
                 .setContentText(desc)
                 .setLargeIcon(BitmapFactory.decodeResource(context.resources,R.drawable.play_store_512))
                 .addAction(action)
+                .setAutoCancel(true)
                 .setGroup(groupKey)
                 .build()
         }
@@ -98,7 +139,7 @@ class Notification : BroadcastReceiver()
 
         val id = intent.getIntExtra(notificationID,0)
 
-        manager.notify(id, notification)
+        manager.notify(obj.ID.toInt(), notification)
         Log.d("NOTIFICATION LOGS","4")
     }
 

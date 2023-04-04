@@ -2,7 +2,9 @@ package com.example.mymedicationtracker
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.DatePicker
@@ -14,13 +16,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
-import kotlin.time.Duration.Companion.days
 
 class settings : AppCompatActivity() , View.OnClickListener {
     lateinit var datePicker: DatePicker
     lateinit var snoozbtn:Button
     lateinit var clearbtn:Button
+    lateinit var historybtn:Button
     lateinit var recyclerView: RecyclerView
 
 
@@ -34,12 +35,12 @@ class settings : AppCompatActivity() , View.OnClickListener {
 
         datePicker = findViewById(R.id.datePicker)
         snoozbtn = findViewById(R.id.snoozbtn)
-        clearbtn = findViewById(R.id.clearbtn)
-        recyclerView = findViewById(R.id.pausedrecyclerView)
-
+        clearbtn = findViewById(R.id.backbtn)
+        recyclerView = findViewById(R.id.historyrecyclerView)
+        historybtn = findViewById(R.id.gotohistorybtn)
         snoozbtn.setOnClickListener(this)
         clearbtn.setOnClickListener(this)
-
+        historybtn.setOnClickListener(this)
 
         recyclerViewManager = LinearLayoutManager(applicationContext)
         recyclerView.layoutManager = recyclerViewManager
@@ -58,7 +59,7 @@ class settings : AppCompatActivity() , View.OnClickListener {
     fun updateRecycleView(){
 
 
-        recyclerView = findViewById(R.id.pausedrecyclerView)
+        recyclerView = findViewById(R.id.historyrecyclerView)
         recyclerViewManager = LinearLayoutManager(applicationContext)
         recyclerView.layoutManager = recyclerViewManager
         //get list from storage and apply it
@@ -204,6 +205,12 @@ class settings : AppCompatActivity() , View.OnClickListener {
                 recyclerView.adapter = recyclerAdapter;
                 recyclerAdapter.notifyDataSetChanged();
 
+            }
+
+            historybtn->{
+
+                val intent = Intent(v.context,history::class.java)
+                startActivity(intent);
             }
         }
     }

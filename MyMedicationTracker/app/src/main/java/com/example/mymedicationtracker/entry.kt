@@ -18,7 +18,11 @@ data class entry(
     //unique ID for notifications
     var myID : String ,
     //notification pause
-    var notificationStatus:Boolean
+    var notificationStatus:Boolean,
+    //medication type pills or other
+    val type:String,
+    //medication amount 30mg pill or so
+    val amount:String
 
 
 )

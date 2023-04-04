@@ -48,14 +48,52 @@
             android:text="@string/Qtimes"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/medicationtimesID"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/Qtimes2"
-            android:inputType="number"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/medicationtimesID2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:ems="10"
+                android:hint="@string/Qtimes2"
+                android:inputType="number"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/medamount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:ems="10"
+                android:hint="amount"
+                android:inputType="number"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/rg2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbpills"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Pills/Tablets" />
+
+                <RadioButton
+                    android:id="@+id/rbmg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Liquids/mg" />
+
+            </RadioGroup>
+        </LinearLayout>
 
         <RadioGroup
             android:id="@+id/RG1"

@@ -10,33 +10,35 @@
     <!-- RecyclerView to display items -->
 
     <!-- Buttons to add and configure items -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RCV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:listitem="@layout/card_new" />
+        tools:listitem="@layout/card_new" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:orientation="horizontal">
 
         <Button
-            android:layout_margin="2dp"
             android:id="@+id/addbtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="0.7"
             android:text="@string/AddEntry" />
 
         <Button
-            android:layout_margin="2dp"
             android:id="@+id/settingsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="0.3"
             android:text="setting" />
 

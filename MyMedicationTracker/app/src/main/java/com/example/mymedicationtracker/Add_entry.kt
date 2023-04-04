@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.jar.Attributes.Name
 import kotlin.random.Random
 
 
@@ -21,8 +20,10 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
     lateinit var MedName: EditText;
     lateinit var Medtimes: EditText;
+    lateinit var medamount: EditText;
     lateinit var RG: RadioGroup;
     lateinit var Radiobtn: RadioButton;
+    lateinit var Radiotype: RadioButton;
     lateinit var rday: RadioButton;
     lateinit var rmonth: RadioButton;
     lateinit var ryear: RadioButton;
@@ -32,16 +33,26 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
     lateinit var totaldosecurrent: EditText;
     lateinit var myID: TextView;
     lateinit var myIDvalue : String
+
+    lateinit var RG2: RadioGroup;
+    lateinit var pillsbtn: RadioButton;
+    lateinit var mgbtn: RadioButton;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entry)
 
         MedName  = findViewById(R.id.medicationNameID)
-        Medtimes  = findViewById(R.id.medicationtimesID)
+        Medtimes  = findViewById(R.id.medicationtimesID2)
+        medamount  = findViewById(R.id.medamount)
+
         submit  = findViewById(R.id.submitbtn)
         switch = findViewById(R.id.switch1)
         progresscurrent = findViewById(R.id.progressid)
         totaldosecurrent = findViewById(R.id.totalid)
+        RG2 = findViewById(R.id.rg2)
+        pillsbtn = findViewById(R.id.rbpills)
+        mgbtn = findViewById(R.id.rbmg)
 
 
         myID = findViewById(R.id.myID)
@@ -71,6 +82,8 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
             }
         }
         if(action == "edit"){
+
+
             submit.setText("Done");
             //edit mode so fill the fields
             val passedstring = intent.getStringExtra("content");
@@ -90,13 +103,15 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                     //is completed now will be calculated
                     switch.isChecked = logs[0].notificationStatus
 
-
                     progresscurrent.setText(logs[0].current.toString())
                     totaldosecurrent.setText(logs[0].tdoes.toString())
                     myID.setText(logs[0].myID)
                     myIDvalue = logs[0].myID
 
-
+                    //check if type is pills or other
+                    setIDfromText(logs[0].type)
+                    medamount.setText(logs[0].amount)
+                    stopnotificationforelement(logs[0].myID)
                 }
 
             }
@@ -110,7 +125,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
     fun setIDfromText(str:String){
 
-
+        Log.d("WHICH ONE",str)
         if(str.equals(getString(R.string.day))) {
             RG.check(R.id.rday)
         }else if(str.equals(getString(R.string.month))){
@@ -118,6 +133,12 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         } else if(str.equals(getString(R.string.year))){
             // Toast.makeText(applicationContext,"year was true", Toast.LENGTH_LONG).show()
             RG.check(R.id.ryear)
+        }
+
+        if(str.equals("Pills/Tablets")){
+            RG2.check(R.id.rbpills)
+        }else if(str.equals("Liquids/mg")){
+            RG2.check(R.id.rbmg)
         }
 
 
@@ -142,6 +163,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
             submit -> {
                 Radiobtn = findViewById(RG.checkedRadioButtonId)
+                Radiotype = findViewById(RG2.checkedRadioButtonId)
                 if (MedName.text.isNullOrBlank()) {
                     Toast.makeText(this, " Please Fill Both Feilds ", Toast.LENGTH_SHORT).show();
                 } else
@@ -150,6 +172,13 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             .show();
                     } else {
                         //save the string
+
+                        if(totaldosecurrent.text.toString().isNullOrBlank()){
+                            totaldosecurrent.setText("1");
+                        }
+                        if(progresscurrent.text.toString().isNullOrBlank()){
+                            progresscurrent.setText("0");
+                        }
 
                         val pref = getSharedPreferences("Gson", Context.MODE_PRIVATE);
                         val prefsEditor = pref.edit()
@@ -176,10 +205,14 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             if(progresscurrent.text.toString().toInt()<=0){
                                 progresscurrent.setText("0");
                             }
+
                             if(progresscurrent.text.toString().toInt()<=totaldosecurrent.text.toString().toInt()){
                                 totaldosecurrent.setText(totaldosecurrent.text.toString());
                             }
-
+                            Log.d("Radiobutton is ",Radiotype.text.toString())
+                            var percentage = 0;
+                            if(progresscurrent.text.toString().toInt()>0)
+                                percentage = totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt()+1
                             logs.add(
                                 entry(
                                     //name
@@ -191,14 +224,16 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                                     // date
                                     current.toString(),
                                     //is completed
-                                    (totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1,
+                                    (percentage>=1),
                                     //total doeses
                                     totaldosecurrent.text.toString().toInt(),
                                     //current progress
                                     progresscurrent.text.toString().toInt(),
                                     // my notification ID
                                     myIDvalue ,
-                                    switch.isChecked
+                                    switch.isChecked ,
+                                    Radiotype.text.toString(),
+                                    medamount.text.toString()
 
 
 
@@ -212,11 +247,24 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             Toast.makeText(this, " Success", Toast.LENGTH_SHORT).show();
 
                             //schedule notification
-                            save_notification_ID(myIDvalue);
+                           // save_notification_ID(myIDvalue);
                             //add its ID into notification IDS
+                            val title = MedName.text.toString()
+                            val desc = "My Description"
+                            val date = Date()
+                            val dose = medamount.text.toString()
+                            val type = Radiotype.text.toString()
+                            val id = myIDvalue
+
+                            val item = historyitem(title, desc, date, dose, type, id)
+
+
                             val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
-                            scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,MedName.text.toString(),left.toString(),switch.isChecked)
-                            Log.d("NAME AND DESC","MY NAME IS ${MedName.text.toString()}")
+                            scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,
+                                MedName.text.toString(),left.toString(),switch.isChecked,Radiotype.text.toString(),medamount.text.toString()
+                            ,item
+                            )
+
 
                         } else {
 
@@ -226,24 +274,32 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             val prefsEditor = pref.edit()
                             var mylistArray = ArrayList<entry>();
                             val rand = Random.Default
-                            var notificationuid = rand.nextInt(9999-1000)+1000
-                            if(myIDvalue.isNullOrBlank()){
-                                myIDvalue = notificationuid.toString()
-                            }
+                            var notificationuid = rand.nextInt(99999-10000)+10000
 
+                            myIDvalue = notificationuid.toString()
+                            myID.setText(myIDvalue)
+                            //schedule notification
+                         //  save_notification_ID(myIDvalue);
+
+
+                            var percentage = 0;
+                            if(progresscurrent.text.toString().toInt()>0)
+                             percentage = totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt()
                             mylistArray.add(
                                 entry(
                                     MedName.text.toString(),
                                     Medtimes.text.toString().toInt(),
                                     Radiobtn.text.toString(),
                                     current.toString(),
-                                    (totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1,
+                                    (percentage)>=1,
                                     //switch.isChecked ,
                                     totaldosecurrent.text.toString().toInt(),
                                     progresscurrent.text.toString().toInt(),
                                     // my notification ID
                                     myIDvalue,
-                                    switch.isChecked
+                                    switch.isChecked ,
+                                    Radiotype.text.toString(),
+                                    medamount.text.toString()
                                 )
                             )
                             val gson = Gson()
@@ -251,7 +307,23 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             prefsEditor.putString("list", temp)
                             prefsEditor.apply()
                             Toast.makeText(this, " Success", Toast.LENGTH_SHORT).show();
-                            finish()
+
+                            val title = MedName.text.toString()
+                            val desc = "My Description"
+                            val date = Date()
+                            val dose = medamount.text.toString()
+                            val type = Radiotype.text.toString()
+                            val id = myIDvalue
+
+                            val item = historyitem(title, desc, date, dose, type, id)
+
+                            val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
+                            scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,
+                                MedName.text.toString(),left.toString(),switch.isChecked,Radiotype.text.toString(),medamount.text.toString()
+                                ,item
+                            )
+
+
                         }
 
 
@@ -328,14 +400,28 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
     }
 
-    private fun scheduleNotification(interval:Long , Name:String , left:String , nstatus: Boolean)
+    private fun scheduleNotification(interval:Long , Name:String , left:String , nstatus: Boolean , type:String , amount:String ,items:historyitem)
     {
         createNotificationChannel()
         createLowPriorityNotificationChannel()
 
         val intent = Intent(applicationContext, Notification::class.java)
         val title = Name
-        val message = "Time To Take your $Name Medication "
+        val message = "Time To Take $amount $type of your $Name Medication "
+        val details = "Taken $amount $type of your $Name Medication "
+        val item = items
+
+        Log.d("AddEntry","receivedItem ${item}")
+
+
+
+        intent.putExtra(parceltitle, item.Title)
+        intent.putExtra(parceldesc, item.desc)
+        intent.putExtra(parceldate, item.date)
+        intent.putExtra(parceldose, item.dose)
+        intent.putExtra(parceltype, item.type)
+        intent.putExtra(parcelid, item.ID)
+
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
 
@@ -358,7 +444,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time ,interval,pendingIntent)
 
 
-        showAlert(time, title, message)
+        showAlert(time, title, message+item.ID)
     }
 
     private fun showAlert(time: Long, title: String, message: String)

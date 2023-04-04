@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/pause_1_512" />
+        android:src="@drawable/history" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -37,13 +37,5 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/remove"
-        android:layout_margin="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:backgroundTint="#960016"
-        android:text="delete" />
 
 </LinearLayout>
