@@ -1,6 +1,7 @@
 package com.example.mymedicationtracker
 
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,19 +10,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import java.lang.String
+
+
 
 class newadapter(public val dataSet: ArrayList<entry>) :
     RecyclerView.Adapter<newadapter.newViewHolder>() {
 
     lateinit var personArrayList: ArrayList<entry>
-    lateinit var context: Context
+
     lateinit var list:ArrayList<entry>
+    lateinit var notificationManager: NotificationManager
 
-
-    inner class newViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class newViewHolder(view: View , context: Context) : RecyclerView.ViewHolder(view) {
         lateinit var titletext: TextView
         lateinit var progressTxt: TextView
         lateinit var progressBar: ProgressBar
@@ -37,7 +42,7 @@ class newadapter(public val dataSet: ArrayList<entry>) :
             editbtn = view.findViewById(R.id.modifybtn);
             deletebtn = view.findViewById(R.id.deletebtn);
             progressBar = view.findViewById(R.id.progressBar);
-
+            notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             editbtn.setOnClickListener {
 
 
@@ -92,13 +97,20 @@ class newadapter(public val dataSet: ArrayList<entry>) :
                     .setNegativeButton("Cancel"){dialogInterface,it->
                         builder.show().dismiss()
                     }
+                    .setNeutralButton("Stop Notification",{dialogInterface,It->
+                        stopnotificationforelement(dataSet[adapterPosition].myID)
+                    })
                     .setPositiveButton("DELETE"){dialogInterface,It->
+
+
                         dataSet.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition);
 
                         //save the changes to the storage
                         val pref = view.getContext().getSharedPreferences("Gson", Context.MODE_PRIVATE);
                         val prefsEditor = pref.edit()
+
+
 
 
                         //serialize dataSet
@@ -113,12 +125,17 @@ class newadapter(public val dataSet: ArrayList<entry>) :
 
 
         }
+
+
     }
 
 
 
 
+    private fun stopnotificationforelement(id: kotlin.String){
+        notificationManager.cancel(id.toInt())
 
+    }
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): newViewHolder {
@@ -129,7 +146,7 @@ class newadapter(public val dataSet: ArrayList<entry>) :
         val lp = view.getLayoutParams()
         view.setLayoutParams(lp)
         lp.height = 256
-        return newViewHolder(view)
+        return newViewHolder(view,viewGroup.context)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -143,12 +160,15 @@ class newadapter(public val dataSet: ArrayList<entry>) :
 
         holder.titletext.setText(String.valueOf(dataSet.get(position).name))
 
-        if(dataSet.get(position).completed){
-            holder.progressTxt.setText("Completed !!");
-        }else {
-            holder.progressTxt.setText( dataSet.get(position).current.toString()+" / "+dataSet.get(position).tdoes.toString());
-        }
+
+
+
         val prog = (dataSet.get(position).current.toString().toFloat()/dataSet.get(position).tdoes.toString().toFloat() )*100
+        if(prog>=100){
+            holder.progressTxt.setText("Completed")
+        }else {
+            holder.progressTxt.setText(dataSet.get(position).current.toString()+"/"+dataSet.get(position).tdoes.toString())
+        }
         holder.progressBar.setProgress(prog.toInt())
 
     }

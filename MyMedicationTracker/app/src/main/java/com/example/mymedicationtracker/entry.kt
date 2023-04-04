@@ -16,6 +16,9 @@ data class entry(
     // current progress
     var current:Int,
     //unique ID for notifications
-    var myID : String
+    var myID : String ,
+    //notification pause
+    var notificationStatus:Boolean
+
 
 )

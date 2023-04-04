@@ -57,12 +57,6 @@
             android:inputType="number"
             android:textSize="18sp" />
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/comp" />
-
         <RadioGroup
             android:id="@+id/RG1"
             android:layout_width="match_parent"
@@ -138,6 +132,13 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/comp" />
 
         <Button
             android:id="@+id/submitbtn"

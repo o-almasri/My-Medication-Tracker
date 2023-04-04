@@ -86,7 +86,10 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                     MedName.setText(logs[0].name)
                     Medtimes.setText(logs[0].times.toString());
                     setIDfromText(logs[0].dmy)
-                    switch.isChecked = logs[0].completed
+                    //is completed now will be calculated
+                    switch.isChecked = logs[0].notificationStatus
+
+
                     progresscurrent.setText(logs[0].current.toString())
                     totaldosecurrent.setText(logs[0].tdoes.toString())
                     myID.setText(logs[0].myID)
@@ -165,6 +168,10 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             if(myIDvalue.isNullOrBlank()){
                                 myIDvalue = notificationuid.toString()
                             }
+
+                            if((totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1){
+
+                            }
                             logs.add(
                                 entry(
                                     //name
@@ -176,13 +183,14 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                                     // date
                                     current.toString(),
                                     //is completed
-                                    switch.isChecked ,
+                                    (totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1,
                                     //total doeses
                                     totaldosecurrent.text.toString().toInt(),
                                     //current progress
                                     progresscurrent.text.toString().toInt(),
                                     // my notification ID
-                                    myIDvalue
+                                    myIDvalue ,
+                                    switch.isChecked
 
 
 
@@ -199,7 +207,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             save_notification_ID(myIDvalue);
                             //add its ID into notification IDS
                             val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
-                            scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,MedName.text.toString(),left.toString())
+                            scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,MedName.text.toString(),left.toString(),switch.isChecked)
 
 
                         } else {
@@ -221,11 +229,13 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                                     Medtimes.text.toString().toInt(),
                                     Radiobtn.text.toString(),
                                     current.toString(),
-                                    switch.isChecked ,
+                                    (totaldosecurrent.text.toString().toInt()/progresscurrent.text.toString().toInt())>=1,
+                                    //switch.isChecked ,
                                     totaldosecurrent.text.toString().toInt(),
                                     progresscurrent.text.toString().toInt(),
                                     // my notification ID
-                                    myIDvalue
+                                    myIDvalue,
+                                    switch.isChecked
                                 )
                             )
                             val gson = Gson()
@@ -310,9 +320,11 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
     }
 
-    private fun scheduleNotification(interval:Long , Name:String , left:String)
+    private fun scheduleNotification(interval:Long , Name:String , left:String , nstatus: Boolean)
     {
         createNotificationChannel()
+        createLowPriorityNotificationChannel()
+
         val intent = Intent(applicationContext, Notification::class.java)
         val title = Name
         val message = "Time To Take your $Name Medication "
@@ -321,8 +333,8 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
         val rand = Random.Default
         var notificationuid = rand.nextInt(9999-1000)+1000
-        intent.putExtra("NID",notificationuid);
-
+        intent.putExtra(notificationID,notificationuid);
+        intent.putExtra(notificationStatus,nstatus);
 
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
@@ -386,7 +398,8 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
     {
         val name = "My Medication tracker"
         val desc = "This is my medication tracker Notification Channel"
-        val importance = NotificationManager.IMPORTANCE_HIGH
+        var importance = NotificationManager.IMPORTANCE_HIGH
+
         val channel = NotificationChannel(channelID, name, importance)
         channel.description = desc
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -394,5 +407,16 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
     }
 
 
+
+    private fun createLowPriorityNotificationChannel()
+    {
+        val name = "My Medication tracker Low Priority"
+        val desc = "This is my medication tracker Low Priority Notification Channel"
+        var importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel(channelID2, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
 
 }//main
