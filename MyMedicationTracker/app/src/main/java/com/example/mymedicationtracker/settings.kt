@@ -138,7 +138,7 @@ class settings : AppCompatActivity() , View.OnClickListener {
                 datelist.addAll(logs)
                 if (!have(datelist,date)) {
                     datelist.add(date)
-                    Toast.makeText(this, "Date added successfully", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Date added successfully", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Date already exists", Toast.LENGTH_SHORT).show()
                 }
@@ -148,7 +148,7 @@ class settings : AppCompatActivity() , View.OnClickListener {
             val myarray = gson.toJson(datelist)
             prefsEditor.putString("datelist", myarray)
             prefsEditor.apply()
-            Toast.makeText(this, "" + datelist, Toast.LENGTH_LONG).show()
+
         } else {
             // First time initialization
             val mylistArray = ArrayList<Date>()
@@ -157,7 +157,7 @@ class settings : AppCompatActivity() , View.OnClickListener {
             val temp = gson.toJson(mylistArray)
             prefsEditor.putString("datelist", temp)
             prefsEditor.apply()
-            Toast.makeText(this, "First time initialization success", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "First time initialization success", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -186,7 +186,23 @@ class settings : AppCompatActivity() , View.OnClickListener {
                 updateRecycleView()
             }
             clearbtn->{
+                // First time initialization
 
+                val sharedPreference = getSharedPreferences("Gson", Context.MODE_PRIVATE)
+                val gson = Gson()
+                val prefsEditor = sharedPreference.edit()
+                val mylistArray = ArrayList<Date>()
+
+                val temp = gson.toJson(mylistArray)
+                prefsEditor.putString("datelist", temp)
+                prefsEditor.apply()
+                Toast.makeText(this, "All Data Removed successfully", Toast.LENGTH_SHORT).show()
+
+
+                recyclerView.setHasFixedSize(true)
+                recyclerAdapter = settingsadapter(mylistArray);
+                recyclerView.adapter = recyclerAdapter;
+                recyclerAdapter.notifyDataSetChanged();
 
             }
         }
