@@ -14,8 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMedicationTracker"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".settings"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <receiver
             android:name=".Notification"
