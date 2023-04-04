@@ -102,7 +102,7 @@ class newadapter(public val dataSet: ArrayList<entry>) :
                     })
                     .setPositiveButton("DELETE"){dialogInterface,It->
 
-
+                        stopnotificationforelement(dataSet[adapterPosition].myID)
                         dataSet.removeAt(adapterPosition)
                         notifyItemRemoved(adapterPosition);
 

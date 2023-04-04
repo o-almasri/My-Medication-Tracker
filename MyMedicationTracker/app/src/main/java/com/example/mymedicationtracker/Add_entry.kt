@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.jar.Attributes.Name
 import kotlin.random.Random
 
 
@@ -94,6 +95,8 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                     totaldosecurrent.setText(logs[0].tdoes.toString())
                     myID.setText(logs[0].myID)
                     myIDvalue = logs[0].myID
+
+
                 }
 
             }
@@ -147,7 +150,6 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             .show();
                     } else {
                         //save the string
-
 
                         val pref = getSharedPreferences("Gson", Context.MODE_PRIVATE);
                         val prefsEditor = pref.edit()
@@ -214,7 +216,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             //add its ID into notification IDS
                             val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
                             scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,MedName.text.toString(),left.toString(),switch.isChecked)
-
+                            Log.d("NAME AND DESC","MY NAME IS ${MedName.text.toString()}")
 
                         } else {
 
@@ -338,7 +340,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         intent.putExtra(messageExtra, message)
 
         val rand = Random.Default
-        var notificationuid = rand.nextInt(9999-1000)+1000
+        var notificationuid = rand.nextInt(99999-10000)+10000
         intent.putExtra(notificationID,notificationuid);
         intent.putExtra(notificationStatus,nstatus);
 
@@ -353,7 +355,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val time = getTime()
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time + 1000,interval,pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time ,interval,pendingIntent)
 
 
         showAlert(time, title, message)
