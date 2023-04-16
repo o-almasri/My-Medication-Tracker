@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.Console
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.log
@@ -41,16 +42,17 @@ class Notification : BroadcastReceiver()
         val desc = intent.getStringExtra(messageExtra)
 
 
-
         val rparceltitle = intent.getStringExtra(parceltitle)!!
         val rparceldesc = intent.getStringExtra(parceldesc)!!
         val rparceldate = Date().time
         val rparceldose = intent.getStringExtra(parceldose)!!
         val rparceltype = intent.getStringExtra(parceltype)!!
         val rparcelid = intent.getStringExtra(parcelid)!!
+        var rparcelnstatus = intent.getBooleanExtra(notificationStatus,true)!!
+
         Log.d("Notification","ID is IS  ${rparcelid}")
 
-        val obj = historyitem(rparceltitle,rparceldesc,Date(rparceldate),rparceldose,rparceltype,rparcelid)
+        val obj = historyitem(rparceltitle,rparceldesc,Date(rparceldate),rparceldose,rparceltype,rparcelid,rparcelnstatus)
 
 
         val sharedPreference = context.getSharedPreferences("Gson", Context.MODE_PRIVATE)
@@ -101,6 +103,8 @@ class Notification : BroadcastReceiver()
         intent.putExtra("parceldose", obj.dose)
         intent.putExtra("parceltype", obj.type)
         intent.putExtra("parcelid", obj.ID)
+        intent.putExtra("NID", obj.nstatus)
+        Log.d("Parcil From Notification","trueorFalse its :"+obj.nstatus)
 
         val receivedItem = intent.getParcelableExtra<historyitem>("myitem")
         intent.putExtra("myitem",receivedItem)
@@ -137,7 +141,7 @@ class Notification : BroadcastReceiver()
 
         val  manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val id = intent.getIntExtra(notificationID,0)
+
 
         manager.notify(obj.ID.toInt(), notification)
         Log.d("NOTIFICATION LOGS","4")

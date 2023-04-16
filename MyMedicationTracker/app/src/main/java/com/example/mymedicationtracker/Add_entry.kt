@@ -3,6 +3,7 @@ package com.example.mymedicationtracker
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -47,13 +48,13 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         medamount  = findViewById(R.id.medamount)
 
         submit  = findViewById(R.id.submitbtn)
-        switch = findViewById(R.id.switch1)
+
         progresscurrent = findViewById(R.id.progressid)
         totaldosecurrent = findViewById(R.id.totalid)
         RG2 = findViewById(R.id.rg2)
         pillsbtn = findViewById(R.id.rbpills)
         mgbtn = findViewById(R.id.rbmg)
-
+        switch = findViewById(R.id.switch1)
 
         myID = findViewById(R.id.myID)
         myIDvalue = ""
@@ -64,6 +65,8 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
 
         RG = findViewById(R.id.RG1)
 
+
+        Radiotype = findViewById(RG2.checkedRadioButtonId)
         //adding onclick listener
         submit.setOnClickListener(this);
 
@@ -111,7 +114,20 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                     //check if type is pills or other
                     setIDfromText(logs[0].type)
                     medamount.setText(logs[0].amount)
-                    stopnotificationforelement(logs[0].myID)
+
+
+
+
+                    val title = MedName.text.toString()
+
+                    val date = Date()
+                    val dose = medamount.text.toString()
+                    val type = Radiotype.text.toString()
+                    val id = myIDvalue
+                    val nstatus = logs[0].notificationStatus;
+                    val desc = "Time To Take $dose $type of your $title Medication "
+                    val item = historyitem(title, desc, date, dose, type, id,nstatus)
+                    stopnotificationforelement(logs[0].myID,applicationContext,item)
                 }
 
             }
@@ -205,7 +221,6 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             if(progresscurrent.text.toString().toInt()<=0){
                                 progresscurrent.setText("0");
                             }
-
                             if(progresscurrent.text.toString().toInt()<=totaldosecurrent.text.toString().toInt()){
                                 totaldosecurrent.setText(totaldosecurrent.text.toString());
                             }
@@ -256,8 +271,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             val type = Radiotype.text.toString()
                             val id = myIDvalue
 
-                            val item = historyitem(title, desc, date, dose, type, id)
-
+                            val item = historyitem(title, desc, date, dose, type, id,switch.isChecked)
 
                             val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
                             scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,
@@ -309,19 +323,26 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                             Toast.makeText(this, " Success", Toast.LENGTH_SHORT).show();
 
                             val title = MedName.text.toString()
-                            val desc = "My Description"
                             val date = Date()
                             val dose = medamount.text.toString()
                             val type = Radiotype.text.toString()
                             val id = myIDvalue
+                            val desc = "Time To Take $dose $type of your $title Medication "
 
-                            val item = historyitem(title, desc, date, dose, type, id)
 
+                            val item = historyitem(title, desc, date, dose, type, id ,switch.isChecked)
+
+
+                            //progress left
                             val left = totaldosecurrent.text.toString().toInt() -progresscurrent.text.toString().toInt()
+
+
                             scheduleNotification(getrepeatingTimeinterval(Radiobtn.text.toString(),Medtimes.text.toString().toLong()) ,
                                 MedName.text.toString(),left.toString(),switch.isChecked,Radiotype.text.toString(),medamount.text.toString()
                                 ,item
                             )
+
+
 
 
                         }
@@ -393,10 +414,65 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         return 1000L
     }
 
-    private fun stopnotificationforelement(id:String){
+    private fun stopnotificationforelement(id:String,context:Context , items:historyitem){
+        //private fun scheduleNotification(interval:Long , Name:String , left:String , nstatus: Boolean , type:String , amount:String ,items:historyitem)
+        val intent = Intent(applicationContext, Notification::class.java)
+        val item = items
+        val title = items.Title
+        val message = items.desc
 
-      val notificationManager  = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        Log.d("StopNotificaiton","receivedItem ${item}")
+    //create same intent as the one passed
+
+        intent.putExtra(parceltitle, item.Title)
+        intent.putExtra(parceldesc, item.desc)
+        intent.putExtra(parceldate, item.date)
+        intent.putExtra(parceldose, item.dose)
+        intent.putExtra(parceltype, item.type)
+        intent.putExtra(parcelid, item.ID)
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        // intent.putExtra(notificationID,item.ID.toInt());
+        intent.putExtra(notificationStatus,item.nstatus);
+
+
+
+      val notificationManager  =context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(id.toInt())
+
+
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+        val pendingIntent =
+            PendingIntent.getService(context, id.toInt(), intent,
+                PendingIntent.FLAG_IMMUTABLE )
+
+
+        val intent2 = Intent(applicationContext, Notification::class.java)
+        val pendingIntent2 =
+            PendingIntent.getService(context, id.toInt(), intent2,
+                PendingIntent.FLAG_NO_CREATE )
+
+
+
+
+
+
+
+            //PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+       // Toast.makeText(this, "Pending Intent"+pendingIntent.toString(), Toast.LENGTH_SHORT).show();
+
+        Log.d("Stopping Pendingintent:","Intent:"+pendingIntent)
+        Log.d("Stopping Pendingintent:","Intent:"+pendingIntent2)
+
+        if (pendingIntent != null && alarmManager != null) {
+            alarmManager.cancel(pendingIntent)
+            Log.d("Alarm Cancelled ","ID :${id.toInt()}")
+        }
+
+
 
     }
 
@@ -406,6 +482,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         createLowPriorityNotificationChannel()
 
         val intent = Intent(applicationContext, Notification::class.java)
+
         val title = Name
         val message = "Time To Take $amount $type of your $Name Medication "
         val details = "Taken $amount $type of your $Name Medication "
@@ -421,23 +498,22 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         intent.putExtra(parceldose, item.dose)
         intent.putExtra(parceltype, item.type)
         intent.putExtra(parcelid, item.ID)
-
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
 
         val rand = Random.Default
         var notificationuid = rand.nextInt(99999-10000)+10000
-        intent.putExtra(notificationID,notificationuid);
-        intent.putExtra(notificationStatus,nstatus);
+       // intent.putExtra(notificationID,item.ID.toInt());
+        intent.putExtra(notificationStatus,item.nstatus);
 
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
-            notificationuid,
+            item.ID.toInt(),
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
-
-
+        Log.d("Creating Pendingintent:","Intent:"+pendingIntent)
+        Log.d("Creating Notifciation for  ","ID :${item.ID.toInt()}")
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val time = getTime()
@@ -512,5 +588,9 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
+
+
+
 
 }//main

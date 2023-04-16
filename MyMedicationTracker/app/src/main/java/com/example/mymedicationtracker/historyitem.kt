@@ -10,7 +10,8 @@ data class historyitem(
     val date: Date,
     val dose:String ,
     val type:String ,
-    val ID:String
+    val ID:String,
+    val nstatus:Boolean,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -19,6 +20,7 @@ data class historyitem(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readBoolean()!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -28,6 +30,7 @@ data class historyitem(
         parcel.writeString(dose)
         parcel.writeString(type)
         parcel.writeString(ID)
+        parcel.writeBoolean(nstatus)
     }
 
     override fun describeContents(): Int {

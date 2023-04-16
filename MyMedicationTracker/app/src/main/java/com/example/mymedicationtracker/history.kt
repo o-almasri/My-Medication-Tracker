@@ -1,5 +1,6 @@
 package com.example.mymedicationtracker
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,8 +26,11 @@ class history : AppCompatActivity(), View.OnClickListener  {
     lateinit var recyclerAdapter: historyadapter
     lateinit var recyclerViewManager: RecyclerView.LayoutManager
     lateinit var list: java.util.ArrayList<historyitem>
+    lateinit var notificationManager: NotificationManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
@@ -37,6 +41,7 @@ class history : AppCompatActivity(), View.OnClickListener  {
         recyclerViewManager = LinearLayoutManager(applicationContext)
         recyclerView.layoutManager = recyclerViewManager
 
+         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         updateRecycleView()
 
 
@@ -46,13 +51,32 @@ class history : AppCompatActivity(), View.OnClickListener  {
         val mode = receivedExtras?.getString("mode")
 
         if(mode == "add"){
+
+
+
+
             val rparceltitle = receivedExtras?.getString("parceltitle")!!
             val rparceldesc = receivedExtras?.getString("parceldesc")!!
             val rparceldate = receivedExtras?.getString("parceldate")!!
             val rparceldose = receivedExtras?.getString("parceldose")!!
             val rparceltype = receivedExtras?.getString("parceltype")!!
             val rparcelid = receivedExtras?.getString("parcelid")!!
-             var    obj = historyitem(rparceltitle,rparceldesc, Date(),rparceldose,rparceltype,rparcelid)
+
+            if(!rparcelid.isNullOrBlank()){
+                notificationManager.cancel(rparcelid.toInt())
+                Log.d("Datalist","Dismissed Notification of ID {$rparcelid}")
+            }
+
+            val rparcelnstatus = receivedExtras?.getBoolean("NID",true)!!
+
+
+
+
+             var obj = historyitem(rparceltitle,rparceldesc, Date(),rparceldose,rparceltype,rparcelid ,rparcelnstatus)
+
+
+
+
 
             Log.d("Datalist","Added 1 element ${obj}")
             storeDate2(obj!!)
