@@ -3,7 +3,6 @@ package com.example.mymedicationtracker
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -127,7 +126,7 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
                     val nstatus = logs[0].notificationStatus;
                     val desc = "Time To Take $dose $type of your $title Medication "
                     val item = historyitem(title, desc, date, dose, type, id,nstatus)
-                    stopnotificationforelement(logs[0].myID,applicationContext,item)
+                    stopnotificationforelement(logs[0].myID,applicationContext)
                 }
 
             }
@@ -414,65 +413,42 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         return 1000L
     }
 
-    private fun stopnotificationforelement(id:String,context:Context , items:historyitem){
+    private fun stopnotificationforelement(id:String,context:Context ){
         //private fun scheduleNotification(interval:Long , Name:String , left:String , nstatus: Boolean , type:String , amount:String ,items:historyitem)
         val intent = Intent(applicationContext, Notification::class.java)
-        val item = items
-        val title = items.Title
-        val message = items.desc
+
+        cancelAlarm(applicationContext,intent,id.toInt())
 
 
-        Log.d("StopNotificaiton","receivedItem ${item}")
-    //create same intent as the one passed
+    }
 
-        intent.putExtra(parceltitle, item.Title)
-        intent.putExtra(parceldesc, item.desc)
-        intent.putExtra(parceldate, item.date)
-        intent.putExtra(parceldose, item.dose)
-        intent.putExtra(parceltype, item.type)
-        intent.putExtra(parcelid, item.ID)
-        intent.putExtra(titleExtra, title)
-        intent.putExtra(messageExtra, message)
+    fun cancelAlarm(context: Context, intent: Intent?, notificationId: Int) {
+        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, notificationId,
+            intent!!, PendingIntent.FLAG_CANCEL_CURRENT
+        )
 
-        // intent.putExtra(notificationID,item.ID.toInt());
-        intent.putExtra(notificationStatus,item.nstatus);
+        val pendingIntent2 = PendingIntent.getBroadcast(
+            context, notificationId,
+            intent!!, PendingIntent.FLAG_NO_CREATE
+        )
 
+        val pendingIntent3 = PendingIntent.getBroadcast(
+            context, notificationId,
+            intent!!, PendingIntent.FLAG_IMMUTABLE
+        )
 
-
-      val notificationManager  =context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(id.toInt())
-
-
-        val alarmManager =
-            context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-        val pendingIntent =
-            PendingIntent.getService(context, id.toInt(), intent,
-                PendingIntent.FLAG_IMMUTABLE )
+        alarmManager.cancel(pendingIntent)
+        alarmManager.cancel(pendingIntent2)
+        alarmManager.cancel(pendingIntent3)
 
 
-        val intent2 = Intent(applicationContext, Notification::class.java)
-        val pendingIntent2 =
-            PendingIntent.getService(context, id.toInt(), intent2,
-                PendingIntent.FLAG_NO_CREATE )
+        Log.d("Stopping Pendingintent1:","Intent:"+pendingIntent+"ID:"+notificationId.toInt())
+        Log.d("Stopping Pendingintent2:","Intent:"+pendingIntent2+"ID:"+notificationId.toInt())
+        Log.d("Stopping Pendingintent3:","Intent:"+pendingIntent3+"ID:"+notificationId.toInt())
 
-
-
-
-
-
-
-            //PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-       // Toast.makeText(this, "Pending Intent"+pendingIntent.toString(), Toast.LENGTH_SHORT).show();
-
-        Log.d("Stopping Pendingintent:","Intent:"+pendingIntent)
-        Log.d("Stopping Pendingintent:","Intent:"+pendingIntent2)
-
-        if (pendingIntent != null && alarmManager != null) {
-            alarmManager.cancel(pendingIntent)
-            Log.d("Alarm Cancelled ","ID :${id.toInt()}")
-        }
-
-
+        pendingIntent.cancel()
 
     }
 
@@ -512,15 +488,24 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        Log.d("Creating Pendingintent:","Intent:"+pendingIntent)
-        Log.d("Creating Notifciation for  ","ID :${item.ID.toInt()}")
+
+
+
+
+        Log.d("Created Pendingintent:","Intent:"+pendingIntent +"ID"+item.ID.toInt())
+        Log.d("Pendingintent Target:","Intent:"+pendingIntent.creatorPackage +"ID"+item.ID.toInt())
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val time = getTime()
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,time ,interval,pendingIntent)
-
-
         showAlert(time, title, message+item.ID)
+
+
+        val newIntent = Intent(applicationContext, Notification::class.java)
+        newIntent.`package` = pendingIntent.creatorPackage
+        val retrievedPendingIntent = PendingIntent.getBroadcast(applicationContext,item.ID.toInt() , newIntent, PendingIntent.FLAG_NO_CREATE)
+        Log.d("New Pendingintent:","Intent:"+retrievedPendingIntent )
+
     }
 
     private fun showAlert(time: Long, title: String, message: String)
@@ -588,6 +573,12 @@ class Add_entry : AppCompatActivity()  , View.OnClickListener {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
+
+
+
+
+
 
 
 
